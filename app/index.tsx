@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, View, KeyboardAvoidingView, Platform, Dimensions, TextInput, ScrollView, Modal } from 'react-native';
+import { Pressable, StyleSheet, View, KeyboardAvoidingView, Platform, Dimensions, TextInput, ScrollView, Modal, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -43,6 +43,7 @@ export default function LoginScreen() {
   const [forgotEmail, setForgotEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [resetSent, setResetSent] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -103,6 +104,10 @@ export default function LoginScreen() {
     setShowForgotPasswordModal(false);
     setForgotEmail('');
     setResetSent(false);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -171,7 +176,7 @@ export default function LoginScreen() {
                   ]}
                   value={email}
                   onChangeText={setEmail}
-                  placeholder="you@example.com"
+                  placeholder="email@address.com"
                   placeholderTextColor={isDark ? '#6b7280' : '#9ca3af'}
                   keyboardType="email-address"
                   autoCapitalize="none"
@@ -183,10 +188,10 @@ export default function LoginScreen() {
 
             <View style={styles.inputGroup}>
               <ThemedText style={styles.label}>Password</ThemedText>
-              <View style={styles.inputWrapper}>
+              <View style={styles.passwordWrapper}>
                 <TextInput
                   style={[
-                    styles.input,
+                    styles.passwordInput,
                     { 
                       color: isDark ? '#ffffff' : '#1a1a2e',
                       backgroundColor: isDark ? '#2a2a44' : '#ffffff',
@@ -196,9 +201,20 @@ export default function LoginScreen() {
                   onChangeText={setPassword}
                   placeholder="Enter your password"
                   placeholderTextColor={isDark ? '#6b7280' : '#9ca3af'}
-                  secureTextEntry
+                  secureTextEntry={!showPassword}
                   editable={!isLoading}
                 />
+                <TouchableOpacity 
+                  style={styles.eyeButton}
+                  onPress={togglePasswordVisibility}
+                  disabled={isLoading}
+                >
+                  <MaterialIcons 
+                    name={showPassword ? 'visibility' : 'visibility-off'} 
+                    size={24} 
+                    color={isDark ? '#9ca3af' : '#6b7280'} 
+                  />
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -545,6 +561,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderRadius: Radius.md,
     fontWeight: '500',
+  },
+  passwordWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: Colors.light.charcoal,
+    borderRadius: Radius.md,
+    backgroundColor: '#ffffff',
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 14,
+    fontSize: 16,
+    borderRadius: Radius.md,
+    fontWeight: '500',
+  },
+  eyeButton: {
+    paddingHorizontal: 14,
+    paddingVertical: 10,
   },
   forgotPasswordLink: {
     alignSelf: 'flex-end',

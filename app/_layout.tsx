@@ -35,9 +35,7 @@ export default function RootLayout() {
                   headerTintColor: isDark ? Colors.dark.text : Colors.light.text,
                 }} 
               />
-              <Stack.Screen name="owner" />
-              <Stack.Screen name="attendant" />
-              <Stack.Screen name="vehicle" />
+              {/* Don't add Stack.Screen for owner, attendant, vehicle - they're groups */}
             </Stack>
           </SafeAreaView>
           <StatusBar style={isDark ? 'light' : 'dark'} />
